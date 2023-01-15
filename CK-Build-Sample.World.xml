@@ -1,0 +1,75 @@
+<!-- Root element name must match the repository name. This is the default world of the CK-Build-Sample-Stack repository. -->
+<CK-Build-Sample-World>
+  <!-- Plugins can provide new element names and functionalities. -->
+  <LoadLibrary Name="CK.Env.Plugin.Basics"/>
+  <LoadLibrary Name="CK.Env.Plugin.SolutionDriver" />
+  <LoadLibrary Name="CK.Env.Plugin.Appveyor" />
+  <LoadLibrary Name="CK.Env.Plugin.NuGet" />
+  <LoadLibrary Name="CK.Env.Plugin.Dotnet" />
+
+  <SharedHttpClient />
+  <ArtifactCenter />
+  <LocalFeedProvider />
+  <NuGetClient />
+
+  <World IsPublic="True" />
+
+  <WorldSecrets>
+    <add Name="SIGNATURE_OPENSOURCE_READ_PAT" Value="n3tndqhxuvdapmu5c3rxylmknxwucu6mjpyetqemremo2hpfl7ka" Description="Read only PAT. Used in apply settings (nuget.config/.npmrc) or to query the feeds. "/>
+  </WorldSecrets>
+
+  <Artifacts>
+    <SourceFeeds>
+      <Feed Type="NuGet" Name="Signature-OpenSource" Url="https://pkgs.dev.azure.com/Signature-OpenSource/Feeds/_packaging/NetCore3/nuget/v3/index.json"/> 
+      <Feed Type="NuGet" Name="nuget.org" Url="https://api.nuget.org/v3/index.json"/> 
+    </SourceFeeds>
+    <TargetRepositories>
+      <Repository
+              Type="NuGetAzure"
+              Organization="Signature-OpenSource"
+              ProjectName="Feeds"
+              FeedName="NetCore3"
+              CheckName="NuGet:Azure:Signature-OpenSource-NetCore3"
+              CheckSecretKeyName="AZURE_FEED_SIGNATURE_OPENSOURCE_PAT" />
+    </TargetRepositories>>
+  </Artifacts>
+
+  <BuildProjectSpec TargetFramework="net6.0" >
+  </BuildProjectSpec>
+  
+  <SharedSolutionSpec SPDXLicense="MIT" PrimaryTargetFramework="net6.0" >
+    <ArtifactSources>
+      <add Name="NuGet:Signature-OpenSource" />
+      <add Name="NuGet:nuget.org"/>
+    </ArtifactSources>
+    <ArtifactTargets>
+      <add Name="NuGet:Azure:Signature-OpenSource-NetCore3" />
+    </ArtifactTargets>
+  </SharedSolutionSpec>
+
+  <GitFolder Name="SampleA" Url="https://github.com/CK-Build/SampleA">
+    <Branch Name="develop">
+      <SolutionSpec />
+    </Branch>
+  </GitFolder>
+
+  <!-- The Url may end with ".git". It is normalized: see https://stackoverflow.com/a/11069413/ -->
+  <GitFolder Name="SampleB" Url="https://github.com/CK-Build/SampleB.git">
+    <Branch Name="develop">
+      <SolutionSpec />
+    </Branch>
+  </GitFolder>
+
+  <Folder Name="Misc">
+    <GitFolder Name="SampleC" Url="https://github.com/CK-Build/SampleC">
+      <Branch Name="develop">
+        <SolutionSpec />
+      </Branch>
+    </GitFolder>
+    <GitFolder Name="SampleD" Url="https://github.com/CK-Build/SampleD">
+      <Branch Name="develop">
+        <SolutionSpec />
+      </Branch>
+    </GitFolder>
+  </Folder>
+</CK-Build-Sample-World>
